@@ -125,3 +125,12 @@ Pull requests are welcome! Please adhere to the **Neo-Moorish** design system wh
 ## 📄 License
 
 MIT
+
+---
+
+## ☕ Support the Project
+
+If you find **TheFetcher** useful and would like to support its development, donations are welcome:
+
+**BTC Address**: `17ospCx6MbNQfqETd1UjAQQSus8ENHXgnh`
+
