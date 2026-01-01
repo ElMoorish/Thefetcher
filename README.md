@@ -9,15 +9,30 @@
 
 ## ✨ Overview
 
-**TheFetcher** is a desktop application built with **Tauri v2** (Rust + Vue 3) aimed at streamlining technical research. It allows you to:
-1.  **Search** the web using a private meta-search engine (**SearXNG**).
-2.  **Select** relevant documentation or articles via a unified, distraction-free UI.
-3.  **Fetch** content without ads or clutter.
-4.  **Synthesize** summaries using local AI (**Ollama**).
-5.  **Vault Mode (Local RAG)**: Ask questions directly to your Obsidian notes.
-6.  **Agent Mode (Autonomous)**: An autonomous researcher that can use tools (Web Search, Fetch, Vault Read) to solve complex queries.
-7.  **Agent-Vault Bridge**: The Agent can reason across both your local knowledge and the live web.
+**TheFetcher** is a desktop application built with **Tauri v2** (Rust + Vue 3) aimed at streamlining technical research. It bridges the gap between the web and your obsidian vault using autonomous agents and local RAG.
+
 8.  **Save** structured knowledge directly into your **Obsidian** vault.
+
+---
+
+## 🕹️ Modes of Operation
+
+### 🌍 Web Mode (The Discoverer)
+Standard search and retrieval. Perfect for quick lookups or gathering raw list of documentation URLs.
+- **Tools**: SearXNG -> Scrapling -> Ollama Summarize.
+
+### 📚 Vault Mode (The Librarian)
+Local-first Knowledge retrieval. Query your Obsidian vault using RAG (Retrieval Augmented Generation).
+- **Process**: Semantic search across notes -> Context injection -> Ollama synthesis.
+- **Requirement**: Obsidian Local REST API must be active.
+
+### 🤖 Agent Mode (The Researcher)
+An autonomous ReAct agent that loops through tools until the query is fully answered.
+- **Toolbox**: `search`, `fetch`, `vault_search`, `vault_read`.
+- **Hybrid Reasoning**: Can search the web for recent updates while simultaneously referencing your local notes for context.
+- **Transparency**: Watch the "thought process" in the LiveLog as the agent decides which tool to use next.
+
+---
 
 ---
 

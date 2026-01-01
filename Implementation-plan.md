@@ -74,57 +74,38 @@ The agent must create this file in the Antigravity configuration directory (%USE
 Note: OBSIDIAN_VERIFY_SSL must be set to "false" to accept the local self-signed certificate.
 
 --------------------------------------------------------------------------------
-4. Phase 3: The Application Logic (The "Fetcher" Workflow)
-Objective: Define the autonomous loop the agent will execute.
-The agent will implement the "Fetch-Summarize-Save" pattern:
-1. Step 1 (Discovery):
-    ◦ Agent utilizes brave_search with arguments {"q": "Tauri v2 documentation", "goggles_id": "tech-docs"}.
-    ◦ Reasoning: Filters out SEO spam, returning only high-fidelity documentation URLs.
-2. Step 2 (Acquisition):
-    ◦ Agent utilizes fetch_url (Scrapling) on the target URL.
-    ◦ Optimization: Agent must request Markdown conversion immediately to reduce token load by 40-60% compared to raw HTML.
-3. Step 3 (Synthesis):
-    ◦ Agent delegates summarization to Local Ollama via the ollama-bridge or direct API call.
-    ◦ Prompt: "Summarize the following documentation into a Reference Note format, preserving code blocks and key architectural concepts."
-4. Step 4 (Persistence):
-    ◦ Agent checks for duplicates using obsidian_search_semantic.
-    ◦ Agent writes the file using obsidian_write_note to the Reference/ folder.
-    ◦ Result: Smart Connections automatically indexes the new note, making it instantly available for RAG.
+4. Final Architecture: The "Agentic RAG" Workflow
+Objective: Define the autonomous loop implemented in lib.rs.
+The agent uses a ReAct (Reasoning and Acting) loop:
+1. Turn 0 (Reasoning): Agent analyzes the query.
+2. Turn 1 (Acting): Agent calls tools:
+    - `vault_search`: Checks if the info exists locally.
+    - `vault_read`: Ingests local context.
+    - `search`: Queries the web if local info is insufficient.
+    - `fetch`: Ingests live documentation.
+3. Turn 2+ (Synthesis): Agent combines local and web data into a final refined answer.
 
 --------------------------------------------------------------------------------
-5. Phase 4: The Executable Interface (UI/UX)
-Objective: Build a standalone dashboard using Tauri v2 and Vue.js.
-5.1 Runtime Selection: Tauri
-We strictly choose Tauri over Electron.
-• Reason: Tauri consumes ~30MB of RAM vs Electron's 200MB+. This is critical to save system RAM for the local Ollama models.
-• Language: Rust (Backend) + Vue.js (Frontend).
-5.2 Frontend Architecture (Vue.js)
-• State Management: Use Pinia to handle the streaming state of the "Agent Activity Log".
-• Components:
-    ◦ RequestInput.vue: User types "Research X".
-    ◦ LiveLog.vue: Visualizes the MCP tool calls (e.g., "Fetching URL...", "Summarizing with Llama 3...").
-    ◦ VaultView.vue: Displays the recently added Obsidian notes via the Local REST API.
-5.3 Sidecar Pattern (Packaging)
-To make "TheFetcher" a "masterpiece" distributable app, we must bundle the dependencies.
-• Action: Configure tauri.conf.json to bundle the MCP servers as Sidecars.
-• Implementation: Use externalBin to bundle the compiled Python/Node binaries for Scrapling and the Obsidian Connector. This ensures the user does not need to manually install Python or Node.js to run TheFetcher.
+5. The Executable Interface (UI/UX)
+Objective: A high-performance, aesthetically pleasing dashboard.
+5.1 Runtime: Tauri v2
+- Footprint: <30MB RAM overhead.
+- Frontend: Vue 3 + Pinia for reactive streaming logs.
+5.2 Aesthetic: Neo-Moorish Minimalism
+- Uses custom Zellige CSS backgrounds and premium typography (Outfit/Inter).
+- LiveLog: Provides transparency into the Agent's thought process.
 
 --------------------------------------------------------------------------------
-6. Phase 5: Security Architecture
-Objective: Ensure Zero-Trust local operation.
-6.1 Transport Security
-• Use Stdio Transport for all MCP connections. This creates a child-process relationship, preventing the tools from being exposed on network ports.
-6.2 Path Restriction
-• Configure the Obsidian MCP server to strictly allow-list only the Reference/ folder. This prevents the agent from accidentally overwriting personal journals or deleting existing data.
-6.3 Optional: Docker Sandboxing
-• If "TheFetcher" is expected to visit high-risk websites, the Scrapling component should be moved to a Docker MCP Gateway.
-• Config: The agent connects to the Docker container via SSE, ensuring malicious JS execution is trapped inside the container's ephemeral filesystem.
+6. Security & Distribution
+- API Keys: Secured via runtime memory; no hardcoding.
+- Sanitization: All local machine references and secrets purged for GitHub.
+- Packaging: `npm run tauri build` generates a production-ready `.exe`.
 
 --------------------------------------------------------------------------------
-7. Execution Checklist for the Agent
-1. [ ] Initialize Environment: Verify Ollama is running and Obsidian Local API is reachable.
-2. [ ] Generate Config: Write the mcp_config.json with valid API keys.
-3. [ ] Scaffold Tauri App: npm create tauri-app@latest (Select Vue.js).
-4. [ ] Implement Sidecars: Register Python/Node binaries in Tauri config.
-5. [ ] Develop Agent Loop: Write the Rust/TypeScript logic to chain Brave -> Scrapling -> Ollama -> Obsidian.
-6. [ ] Test: Run a query ("Fetch Pydantic Docs") and verify the .md file appears in Obsidian.
+7. Project Status: COMPLETED 🚀
+1. [x] Initialize Environment: Ollama & Obsidian ready.
+2. [x] Generate Config: Sanitized template.
+3. [x] Scaffold Tauri App: Vue 3 + Pinia.
+4. [x] Implement Agent Loop: ReAct + Vault Bridge.
+5. [x] UI/UX Polish: Neo-Moorish performance targets met.
+6. [x] Production: Build successful.
