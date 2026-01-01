@@ -1,0 +1,10 @@
+# SearXNG settings to enable JSON API
+use_default_settings: true
+
+server:
+  secret_key: "thefetcher-secret-key-12345"
+
+search:
+  formats:
+    - html
+    - json

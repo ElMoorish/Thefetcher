@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap');
+
+:root {
+  /* Harmonized Neo-Moorish Palette */
+  --bg-deep: #0f172a;
+  /* Slate 900 */
+  --bg-surface: rgba(30, 41, 59, 0.7);
+  /* Slate 800 (glass) */
+  --bg-card: rgba(15, 23, 42, 0.6);
+
+  /* Andalusian Accents */
+  --accent-gold: #fbbf24;
+  /* Amber 400 */
+  --accent-indigo: #818cf8;
+  /* Indigo 400 */
+  --accent-emerald: #34d399;
+  /* Emerald 400 */
+  --accent-rose: #fb7185;
+  /* Rose 400 */
+
+  --text-main: #f1f5f9;
+  /* Slate 100 */
+  --text-muted: #94a3b8;
+  /* Slate 400 */
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(129, 140, 248, 0.3);
+
+  /* Complex Zellige Pattern */
+  --zellige-pattern:
+    radial-gradient(circle at 0% 50%, rgba(52, 211, 153, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 100% 50%, rgba(251, 191, 36, 0.03) 0%, transparent 50%),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 40px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 40px);
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--bg-deep);
+  background-image: var(--zellige-pattern);
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  /* Prevent body scroll, handle in app */
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: var(--bg-surface);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.glass-input {
+  background: rgba(15, 23, 42, 0.5) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-subtle) !important;
+  color: var(--text-main) !important;
+}
+
+.glass-input:focus {
+  border-color: var(--accent-indigo) !important;
+  box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2) !important;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-indigo), var(--accent-emerald));
+  border: none;
+  color: #0f172a;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(129, 140, 248, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(52, 211, 153, 0.4);
+  filter: brightness(1.1);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
