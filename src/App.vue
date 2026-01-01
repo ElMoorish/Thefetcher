@@ -17,6 +17,18 @@ async function onSelect(result: SearchResult) {
   store.searchResults = [] // Hide results
 
   try {
+     // Check if we already have the content (e.g. from Vault/Agent)
+     if (result.content) {
+         store.setResult({
+             success: true,
+             title: result.title,
+             summary: result.content,
+             file_path: 'In Memory',
+             error: undefined
+         })
+         return
+     }
+
      const options = {
       useAi: store.settings.aiSummarization,
       headless: store.settings.headlessMode,

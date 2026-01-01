@@ -5,6 +5,12 @@ import { useAgentStore, type SearchResult } from '../stores/agent'
 
 const store = useAgentStore()
 const query = ref('')
+const modes = [
+  { id: 'web', label: 'Web', icon: '🌐' },
+  { id: 'vault', label: 'Vault', icon: '🧠' },
+  { id: 'agent', label: 'Agent', icon: '🤖' }
+]
+const currentMode = ref('web')
 
 async function submit() {
   if (!query.value.trim() || store.isRunning) return
@@ -14,7 +20,50 @@ async function submit() {
   store.lastQuery = query.value
   
   try {
-    const results = await invoke<SearchResult[]>('perform_search', { query: query.value })
+    let results: SearchResult[] = []
+    
+    if (currentMode.value === 'web') {
+      results = await invoke<SearchResult[]>('perform_search', { query: query.value })
+    } else if (currentMode.value === 'vault') {
+       if (!store.settings.obsidianApiKey) {
+         throw new Error("Obsidian API Key required. Please set it in Settings.")
+       }
+       store.addLog({ step: 'discovery', status: 'running', message: 'Chatting with Vault...' })
+       
+       // Using 'chat_with_vault' command
+       // Note: Result is FetchResult (single), we wrap it as SearchResult
+       const chatRes = await invoke<any>('chat_with_vault', { 
+         query: query.value,
+         apiKey: store.settings.obsidianApiKey,
+         model: store.settings.selectedModel
+       })
+       
+       results = [{
+         title: "Vault Answer",
+         url: "local-rag",
+         content: chatRes.summary // Using 'summary' as content/snippet
+       }]
+
+    } else {
+       // Agent mode
+       if (!store.settings.obsidianApiKey) {
+           store.addLog({ step: 'discovery', status: 'pending', message: 'Warning: No API Key? Agent might fail search.' })
+       }
+       store.addLog({ step: 'discovery', status: 'running', message: 'Agent initializing...' })
+       
+       const agentRes = await invoke<any>('run_agent_loop', {
+           query: query.value,
+           model: store.settings.selectedModel,
+           api_key: store.settings.obsidianApiKey
+       })
+
+       results = [{
+           title: "Agent Answer",
+           url: "autonomous-agent",
+           content: agentRes.summary
+       }]
+    }
+    
     store.setSearchResults(results)
   } catch (e) {
     store.addLog({ step: 'error', status: 'error', message: String(e) })
@@ -25,24 +74,82 @@ async function submit() {
 </script>
 
 <template>
-  <form @submit.prevent="submit" class="input-form">
-    <div class="input-wrapper">
-      <span class="icon">🔍</span>
-      <input
-        v-model="query"
-        placeholder="Research Tauri v2 documentation..."
-        :disabled="store.isRunning"
-        class="glass-input"
-      />
+  <div class="request-container">
+    <!-- Mode Switcher -->
+    <div class="mode-switcher">
+      <button 
+        v-for="mode in modes" 
+        :key="mode.id"
+        class="mode-btn"
+        :class="{ active: currentMode === mode.id }"
+        @click="currentMode = mode.id"
+      >
+        <span>{{ mode.icon }}</span>
+        <span>{{ mode.label }}</span>
+      </button>
     </div>
-    <button :disabled="store.isRunning || !query.trim()" class="btn-primary">
-      <span v-if="store.isRunning" class="spinner"></span>
-      {{ store.isRunning ? 'Searching...' : 'Search' }}
-    </button>
-  </form>
+
+    <form @submit.prevent="submit" class="input-form">
+      <div class="input-wrapper">
+        <span class="icon">🔍</span>
+        <input
+          v-model="query"
+          :placeholder="currentMode === 'web' ? 'Research the web...' : (currentMode === 'vault' ? 'Ask your vault...' : 'Command the agent...')"
+          :disabled="store.isRunning"
+          class="glass-input"
+        />
+      </div>
+      <button :disabled="store.isRunning || !query.trim()" class="btn-primary">
+        <span v-if="store.isRunning" class="spinner"></span>
+        {{ store.isRunning ? 'Running...' : 'Go' }}
+      </button>
+    </form>
+  </div>
 </template>
 
 <style scoped>
+.request-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mode-switcher {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--bg-surface);
+  padding: 0.5rem; /* Increased padding slightly */
+  border-radius: 16px; /* Update radius */
+  width: fit-content;
+  margin: 0 auto; /* Center it */
+  border: 1px solid var(--border-subtle);
+}
+
+.mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  gap: 0.5rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.mode-btn:hover {
+  color: var(--text-main);
+  background: rgba(255,255,255,0.05); /* Slight hover bg */
+}
+
+.mode-btn.active {
+  background: var(--accent-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
 .input-form {
   display: flex;
   gap: 1rem;
@@ -55,6 +162,7 @@ async function submit() {
   align-items: center;
 }
 
+/* ... existing styles for icon, glass-input, etc ... */
 .icon {
   position: absolute;
   left: 1.25rem;
@@ -91,7 +199,7 @@ input:disabled {
   cursor: not-allowed;
 }
 
-button {
+button.btn-primary { /* Explicit specificity */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,10 +213,10 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  min-width: 140px;
+  min-width: 100px; /* Reduced min-width */
 }
 
-button:hover:not(:disabled) {
+button.btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
 }

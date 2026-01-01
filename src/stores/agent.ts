@@ -19,6 +19,7 @@ export interface FetchResult {
 export interface SearchResult {
     url: string
     title: string
+    content?: string // Snippet or Full Answer
 }
 
 export interface AgentSettings {

@@ -28,7 +28,8 @@ function select(result: SearchResult) {
         <div class="icon">📄</div>
         <div class="info">
           <h4>{{ result.title }}</h4>
-          <p class="url">{{ result.url }}</p>
+          <p v-if="result.content" class="snippet">{{ result.content }}</p>
+          <p v-else class="url">{{ result.url }}</p>
         </div>
         <div class="arrow">→</div>
       </div>
@@ -118,8 +119,19 @@ function select(result: SearchResult) {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: 'JetBrains Mono', monospace;
   opacity: 0.7;
+}
+
+.snippet {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  white-space: pre-wrap; /* Preserve formatting */
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* Limit lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .arrow {

@@ -14,7 +14,10 @@
 2.  **Select** relevant documentation or articles via a unified, distraction-free UI.
 3.  **Fetch** content without ads or clutter.
 4.  **Synthesize** summaries using local AI (**Ollama**).
-5.  **Save** structured knowledge directly into your **Obsidian** vault.
+5.  **Vault Mode (Local RAG)**: Ask questions directly to your Obsidian notes.
+6.  **Agent Mode (Autonomous)**: An autonomous researcher that can use tools (Web Search, Fetch, Vault Read) to solve complex queries.
+7.  **Agent-Vault Bridge**: The Agent can reason across both your local knowledge and the live web.
+8.  **Save** structured knowledge directly into your **Obsidian** vault.
 
 ---
 
@@ -59,7 +62,7 @@ The UI features a unique **Neo-Moorish** aesthetic, blending geometric complexit
 
 1.  Clone the repository.
     ```bash
-    git clone https://github.com/themoorish/TheFetcher.git
+    git clone https://github.com/ElMoorish/Thefetcher.git
     cd TheFetcher
     ```
 2.  Install dependencies.
