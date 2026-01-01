@@ -58,7 +58,7 @@ The UI features a unique **Neo-Moorish** aesthetic, blending geometric complexit
 
 1.  Clone the repository.
     ```bash
-    git clone https://github.com/yourusername/TheFetcher.git
+    git clone https://github.com/themoorish/TheFetcher.git
     cd TheFetcher
     ```
 2.  Install dependencies.
