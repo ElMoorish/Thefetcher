@@ -4,7 +4,7 @@
 > **"Search less, Fetch more."**
 > A local-first, privacy-focused research assistant that bridges the gap between the web and your obsidian vault.
 
-![TheFetcher Logo](https://via.placeholder.com/150/4f46e5/ffffff?text=TF) <!-- Replace with actual screenshot if available -->
+
 
 ## ✨ Overview
 
