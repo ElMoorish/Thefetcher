@@ -4,6 +4,7 @@
 > **"Search less, Fetch more."**
 > A local-first, privacy-focused research assistant that bridges the gap between the web and your obsidian vault.
 
+<img width="1203" height="832" alt="image" src="https://github.com/user-attachments/assets/944af2ee-88b3-4665-9e61-3d77031f123a" />
 
 
 ## ✨ Overview
