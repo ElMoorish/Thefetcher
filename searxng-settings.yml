@@ -2,7 +2,7 @@
 use_default_settings: true
 
 server:
-  secret_key: "thefetcher-secret-key-12345"
+  secret_key: "YOUR_SEARXNG_SECRET_KEY"
 
 search:
   formats:
