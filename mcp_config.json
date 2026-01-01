@@ -1,22 +1,5 @@
 {
   "mcpServers": {
-    "context7": {
-      "serverUrl": "https://mcp.context7.com/mcp",
-      "headers": {
-        "CONTEXT7_API_KEY": "YOUR_CONTEXT7_API_KEY"
-      }
-    },
-    "n8n-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "supergateway",
-        "--streamableHttp",
-        "http://localhost:5678/mcp-server/http",
-        "--header",
-        "authorization:Bearer YOUR_N8N_TOKEN"
-      ]
-    },
     "searxng-search": {
       "command": "uvx",
       "args": [
