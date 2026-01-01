@@ -1,0 +1,69 @@
+{
+  "mcpServers": {
+    "context7": {
+      "serverUrl": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "YOUR_CONTEXT7_API_KEY"
+      }
+    },
+    "n8n-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "supergateway",
+        "--streamableHttp",
+        "http://localhost:5678/mcp-server/http",
+        "--header",
+        "authorization:Bearer YOUR_N8N_TOKEN"
+      ]
+    },
+    "searxng-search": {
+      "command": "uvx",
+      "args": [
+        "mcp-searxng"
+      ],
+      "env": {
+        "SEARXNG_URL": "http://localhost:8080"
+      }
+    },
+    "web-fetcher": {
+      "command": "uvx",
+      "args": [
+        "scrapling-fetch-mcp"
+      ],
+      "env": {
+        "HEADLESS_MODE": "true"
+      }
+    },
+    "obsidian-vault": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@connorbritain/obsidian-mcp-server"
+      ],
+      "env": {
+        "OBSIDIAN_API_KEY": "YOUR_OBSIDIAN_API_KEY",
+        "OBSIDIAN_PROTOCOL": "https",
+        "OBSIDIAN_VERIFY_SSL": "false"
+      }
+    },
+    "ollama-bridge": {
+      "command": "uvx",
+      "args": [
+        "mcp-ollama"
+      ],
+      "env": {
+        "OLLAMA_BASE_URL": "http://localhost:11434",
+        "OLLAMA_MODEL": "llama3.2:1b"
+      }
+    },
+    "magic": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "magic-mcp"
+      ],
+      "env": {}
+    }
+  }
+}
